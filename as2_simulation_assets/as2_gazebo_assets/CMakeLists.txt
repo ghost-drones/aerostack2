@@ -15,10 +15,10 @@ endif()
 set(GZ_VERSION "fortress")
 
 # check if harmonic libs are available
-find_package(gz-common5 QUIET)
-if(gz-common5_FOUND)
-  set(GZ_VERSION "harmonic")
-endif()
+#find_package(gz-common5 QUIET)
+#if(gz-common5_FOUND)
+#  set(GZ_VERSION "harmonic")
+#endif()
 
 message("Using GAZEBO version: ${GZ_VERSION}")
 
