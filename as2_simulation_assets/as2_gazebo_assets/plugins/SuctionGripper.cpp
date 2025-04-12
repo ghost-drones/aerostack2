@@ -26,33 +26,22 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include <ignition/plugin/Register.hh>
 
-#include <gz/plugin/Register.hh>
+#include <ignition/transport/Node.hh>
 
+#include <ignition/msgs/contacts.pb.h>
 
-#include <gz/transport/Node.hh>
+#include <ignition/msgs.hh>
 
-#include <gz/msgs/contacts.pb.hh>
-
-#include <gz/msgs.hh>
-
-#include <gz/gazebo/components.hh>
-#include <gz/gazebo/Model.hh>
+#include <ignition/gazebo/components.hh>
+#include <ignition/gazebo/Model.hh>
 
 #include "SuctionGripper.hpp"
 
-// using mbzirc::SuctionGripperPrivate;
-// using mbzirc::SuctionGripperPlugin;
-// using ignition::gazebo;
-// using gazebo::System;
-
-// using ::mbzric::SuctionGripperPrivate;
-// using ::mbzric::SuctionGripperPlugin;
-// using ::ignition::gazebo::System;
-
-// using namespace mbzirc;
-// using namespace ignition;
-// using namespace gazebo;
+using namespace mbzirc;
+using namespace ignition;
+using namespace gazebo;
 
 class mbzirc::SuctionGripperPrivate
 {
@@ -147,6 +136,7 @@ public:
   {
     std::lock_guard<std::mutex> lock(this->mtx);
     this->suctionOn = _suctionOn.data();
+    ignerr << "Received suction command: " << this->suctionOn << std::endl;
   }
 };
 

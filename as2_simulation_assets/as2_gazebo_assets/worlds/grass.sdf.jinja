@@ -5,6 +5,7 @@
         <physics name="4ms" type="ignored">
             <max_step_size>0.004</max_step_size>
             <real_time_factor>1.0</real_time_factor>
+            <max_contacts>5</max_contacts> 
         </physics>
         <plugin
             filename="ignition-gazebo-physics-system"
@@ -22,6 +23,10 @@
             filename="ignition-gazebo-sensors-system"
             name="ignition::gazebo::systems::Sensors">
             <render_engine>ogre2</render_engine>
+        </plugin>
+        <plugin
+            filename="ignition-gazebo-contact-system"
+            name="ignition::gazebo::systems::Contact">
         </plugin>
 
         <light type="directional"
@@ -51,14 +56,6 @@
         </spherical_coordinates> 
 
         {% endif -%}
-
-        <scene>
-            <sky>
-                <clouds>
-                    <speed>2</speed>
-                </clouds>
-            </sky>
-        </scene>
 
         <include>
             <uri>model://grass_patch</uri>

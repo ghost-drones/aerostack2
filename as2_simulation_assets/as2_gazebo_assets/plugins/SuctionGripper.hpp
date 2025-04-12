@@ -43,13 +43,11 @@
  * limitations under the License.
  *
  */
-#ifndef AS2_SIMULATION_ASSETS__AS2_GAZEBO_ASSETS__PLUGINS__SUCTIONGRIPPER_HPP_
-#define AS2_SIMULATION_ASSETS__AS2_GAZEBO_ASSETS__PLUGINS__SUCTIONGRIPPER_HPP_
+#ifndef MBZIRC_IGN_SUCTIONGRIPPER_HPP_
+#define MBZIRC_IGN_SUCTIONGRIPPER_HPP_
 
 #include <memory>
-#include <string>
-#include <utility>
-#include <gz/gazebo/System.hh>
+#include <ignition/gazebo/System.hh>
 
 namespace mbzirc
 {

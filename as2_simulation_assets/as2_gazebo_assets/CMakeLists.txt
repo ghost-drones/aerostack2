@@ -180,18 +180,6 @@ install(TARGETS
 
 # ============================================================================
 # Plugins
-# add_library(SuctionGripper SHARED
-#   plugins/SuctionGripper.cc
-# )
-# target_link_libraries(SuctionGripper PUBLIC
-#   gz-gazebo${IGN_GAZEBO_VER}::core
-#   gz-plugin${IGN_PLUGIN_VER}::ignition-plugin${IGN_PLUGIN_VER}
-#   gz-rendering${IGN_RENDERING_VER}::ignition-rendering${IGN_RENDERING_VER}
-# )
-
-# install(
-#   TARGETS SuctionGripper
-#   DESTINATION lib)
 
 if( ${GZ_VERSION} STREQUAL "harmonic" )
 
@@ -227,6 +215,21 @@ target_link_libraries(MulticopterINDIControl PUBLIC
 
 install(
   TARGETS MulticopterINDIControl
+  DESTINATION lib)
+
+add_library(SuctionGripper SHARED
+  plugins/SuctionGripper.cpp
+)
+target_link_libraries(SuctionGripper PUBLIC
+  ${GZ_SIM}
+  ${GZ_COMMON}
+  ${GZ_TRANSPORT}
+  ${GZ_MSGS}
+  Eigen3::Eigen
+)
+
+install(
+  TARGETS SuctionGripper
   DESTINATION lib)
 
 endif()
