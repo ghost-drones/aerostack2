@@ -320,6 +320,35 @@ class MagnetometerTypeEnum(str, Enum):
         ]
         return bridges
 
+class GanchoTypeEnum(str, Enum):
+    """Valid gancho model types."""
+
+    GANCHO = 'gancho'
+
+    @staticmethod
+    def bridges(
+        world_name: str,
+        drone_model_name: str,
+        sensor_model_name: str,
+        sensor_model_type: str,
+        sensor_model_prefix: str = '',
+    ) -> List[Bridge]:
+        """
+        Return bridges needed for gancho model.
+
+        :param world_name: gz world name
+        :param model_name: gz drone model name
+        :param payload: gz payload (sensor) model type
+        :param sensor_name: gz payload (sensor) model name
+        :param model_prefix: ros model prefix, defaults to ''
+        :return: list with bridges
+        """
+        bridges = [
+            gz_bridges.gancho(sensor_model_name, 'attach'),
+            gz_bridges.gancho(sensor_model_name, 'detach')
+        ]
+        return bridges
+
 
 class GripperTypeEnum(str, Enum):
     """Valid gripper model types."""
@@ -408,7 +437,7 @@ class Payload(Entity):
 
     model_type: Union[
         CameraTypeEnum, DepthCameraTypeEnum, LidarTypeEnum, GpsTypeEnum, GimbalTypeEnum,
-        AirPressureTypeEnum, MagnetometerTypeEnum
+        AirPressureTypeEnum, MagnetometerTypeEnum, GanchoTypeEnum
     ] = None
     sensor_attached: str = 'None'
     sensor_attached_type: str = 'None'
