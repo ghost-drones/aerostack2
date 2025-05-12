@@ -59,6 +59,8 @@ class CameraTypeEnum(str, Enum):
     HD_CAM = 'hd_camera'
     SEMANTIC_CAM = 'semantic_camera'
     GRAYSCALE_CAM = 'grayscaled_camera'
+    C920_CAM = 'logitech_c920'
+    BRIO_CAM = 'logitech_brio'
 
     @staticmethod
     def nodes(
