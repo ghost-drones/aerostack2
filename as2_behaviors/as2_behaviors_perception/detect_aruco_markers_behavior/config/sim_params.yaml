@@ -1,5 +1,7 @@
 /**:
     ros__parameters:
-        aruco_size: 0.3 # meters
+        aruco_size: 0.25 # meters
         camera_model: "pinhole"
         camera_qos_reliable: true
+        camera_image_topic: "/x500_px4/sensor_measurements/downward_cam/image_raw"
+        camera_info_topic: "/x500_px4/sensor_measurements/downward_cam/camera_info"

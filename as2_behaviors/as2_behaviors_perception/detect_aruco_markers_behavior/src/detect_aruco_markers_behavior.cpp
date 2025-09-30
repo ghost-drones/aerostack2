@@ -85,8 +85,9 @@ void DetectArucoMarkersBehavior::loadParameters()
   RCLCPP_INFO(get_logger(), "Params: aruco_size: %.3f m", aruco_size_);
 
   // TODO(david): Load dictionary from param
-  aruco_dict_ = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
+  // aruco_dict_ = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
   // aruco_dict_ = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_5X5_1000);
+  aruco_dict_ = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_5X5_250);
 }
 
 // SIMULATION
