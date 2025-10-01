@@ -59,9 +59,9 @@
 #include "as2_behavior_tree/action/set_origin.hpp"
 #include "as2_behavior_tree/action/takeoff_action.hpp"
 #include "as2_behavior_tree/condition/is_flying_condition.hpp"
-#include "as2_behavior_tree/condition/is_aruco_detected_condition.hpp"
 #include "as2_behavior_tree/decorator/wait_for_alert.hpp"
 #include "as2_behavior_tree/decorator/wait_for_event.hpp"
+#include "as2_behavior_tree/decorator/wait_for_aruco.hpp"
 
 
 int main(int argc, char * argv[])
@@ -93,9 +93,9 @@ int main(int argc, char * argv[])
   factory.registerNodeType<as2_behavior_tree::GoToAction>("GoTo");
   factory.registerNodeType<as2_behavior_tree::LandAction>("Land");
   factory.registerNodeType<as2_behavior_tree::IsFlyingCondition>("IsFlying");
-  factory.registerNodeType<as2_behavior_tree::IsArucoDetectedCondition>("IsArucoDetected");
   factory.registerNodeType<as2_behavior_tree::WaitForEvent>("WaitForEvent");
   factory.registerNodeType<as2_behavior_tree::WaitForAlert>("WaitForAlert");
+  factory.registerNodeType<as2_behavior_tree::WaitForAruco>("WaitForAruco");
   factory.registerNodeType<as2_behavior_tree::SendEvent>("SendEvent");
   factory.registerNodeType<as2_behavior_tree::Echo>("Echo");
   factory.registerNodeType<as2_behavior_tree::SetOrigin>("SetOrigin");
