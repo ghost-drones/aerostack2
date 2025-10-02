@@ -1,45 +1,8 @@
-// Copyright 2024 Universidad Politécnica de Madrid
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
-//
-//    * Redistributions of source code must retain the above copyright
-//      notice, this list of conditions and the following disclaimer.
-//
-//    * Redistributions in binary form must reproduce the above copyright
-//      notice, this list of conditions and the following disclaimer in the
-//      documentation and/or other materials provided with the distribution.
-//
-//    * Neither the name of the Universidad Politécnica de Madrid nor the names of its
-//      contributors may be used to endorse or promote products derived from
-//      this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-// POSSIBILITY OF SUCH DAMAGE.
+#include "centralize_marker_behavior/centralize_marker_behavior.hpp"
 
-/**
- * @file follow_path_behavior.cpp
- *
- * follow_path_behavior file
- *
- * @authors Rafael Perez-Segui
- *          Pedro Arias Pérez
- */
-
-#include "follow_path_behavior/follow_path_behavior.hpp"
-
-FollowPathBehavior::FollowPathBehavior(const rclcpp::NodeOptions & options)
-: as2_behavior::BehaviorServer<as2_msgs::action::FollowPath>(
-    as2_names::actions::behaviors::followpath,
+CentralizeMarkerBehavior::CentralizeMarkerBehavior(const rclcpp::NodeOptions & options)
+: as2_behavior::BehaviorServer<as2_msgs::action::CentralizeMarker>(
+    as2_names::actions::behaviors::centralize_marker,
     options)
 {
   try {
@@ -48,7 +11,7 @@ FollowPathBehavior::FollowPathBehavior(const rclcpp::NodeOptions & options)
     RCLCPP_FATAL(
       this->get_logger(), "Launch argument <plugin_name> not defined or malformed: %s",
       e.what());
-    this->~FollowPathBehavior();
+    this->~CentralizeMarkerBehavior();
   }
   try {
     this->declare_parameter<double>("follow_path_speed");
@@ -58,7 +21,7 @@ FollowPathBehavior::FollowPathBehavior(const rclcpp::NodeOptions & options)
       "Launch argument <follow_path_speed> not defined or "
       "malformed: %s",
       e.what());
-    this->~FollowPathBehavior();
+    this->~CentralizeMarkerBehavior();
   }
   try {
     this->declare_parameter<double>("follow_path_threshold");
@@ -66,7 +29,7 @@ FollowPathBehavior::FollowPathBehavior(const rclcpp::NodeOptions & options)
     RCLCPP_FATAL(
       this->get_logger(),
       "Launch argument <follow_path_threshold> not defined or malformed: %s", e.what());
-    this->~FollowPathBehavior();
+    this->~CentralizeMarkerBehavior();
   }
 
   loader_ = std::make_shared<pluginlib::ClassLoader<follow_path_base::FollowPathBase>>(
@@ -90,25 +53,25 @@ FollowPathBehavior::FollowPathBehavior(const rclcpp::NodeOptions & options)
     RCLCPP_ERROR(
       this->get_logger(), "The plugin failed to load for some reason. Error: %s\n",
       ex.what());
-    this->~FollowPathBehavior();
+    this->~CentralizeMarkerBehavior();
   }
 
   base_link_frame_id_ = as2::tf::generateTfName(this, "base_link");
 
   platform_info_sub_ = this->create_subscription<as2_msgs::msg::PlatformInfo>(
     as2_names::topics::platform::info, as2_names::topics::platform::qos,
-    std::bind(&FollowPathBehavior::platform_info_callback, this, std::placeholders::_1));
+    std::bind(&CentralizeMarkerBehavior::platform_info_callback, this, std::placeholders::_1));
 
   twist_sub_ = this->create_subscription<geometry_msgs::msg::TwistStamped>(
     as2_names::topics::self_localization::twist, as2_names::topics::self_localization::qos,
-    std::bind(&FollowPathBehavior::state_callback, this, std::placeholders::_1));
+    std::bind(&CentralizeMarkerBehavior::state_callback, this, std::placeholders::_1));
 
   RCLCPP_DEBUG(this->get_logger(), "FollowPath Behavior ready!");
 }
 
-FollowPathBehavior::~FollowPathBehavior() {}
+CentralizeMarkerBehavior::~CentralizeMarkerBehavior() {}
 
-void FollowPathBehavior::state_callback(
+void CentralizeMarkerBehavior::state_callback(
   const geometry_msgs::msg::TwistStamped::SharedPtr _twist_msg)
 {
   try {
@@ -121,13 +84,13 @@ void FollowPathBehavior::state_callback(
   return;
 }
 
-void FollowPathBehavior::platform_info_callback(const as2_msgs::msg::PlatformInfo::SharedPtr msg)
+void CentralizeMarkerBehavior::platform_info_callback(const as2_msgs::msg::PlatformInfo::SharedPtr msg)
 {
   follow_path_plugin_->platform_info_callback(msg);
   return;
 }
 
-bool FollowPathBehavior::process_goal(
+bool CentralizeMarkerBehavior::process_goal(
   std::shared_ptr<const as2_msgs::action::FollowPath::Goal> goal,
   as2_msgs::action::FollowPath::Goal & new_goal)
 {
@@ -168,7 +131,7 @@ bool FollowPathBehavior::process_goal(
   return true;
 }
 
-bool FollowPathBehavior::on_activate(
+bool CentralizeMarkerBehavior::on_activate(
   std::shared_ptr<const as2_msgs::action::FollowPath::Goal> goal)
 {
   as2_msgs::action::FollowPath::Goal new_goal = *goal;
@@ -179,7 +142,7 @@ bool FollowPathBehavior::on_activate(
     std::make_shared<const as2_msgs::action::FollowPath::Goal>(new_goal));
 }
 
-bool FollowPathBehavior::on_modify(std::shared_ptr<const as2_msgs::action::FollowPath::Goal> goal)
+bool CentralizeMarkerBehavior::on_modify(std::shared_ptr<const as2_msgs::action::FollowPath::Goal> goal)
 {
   as2_msgs::action::FollowPath::Goal new_goal = *goal;
   if (!process_goal(goal, new_goal)) {
@@ -189,22 +152,22 @@ bool FollowPathBehavior::on_modify(std::shared_ptr<const as2_msgs::action::Follo
     std::make_shared<const as2_msgs::action::FollowPath::Goal>(new_goal));
 }
 
-bool FollowPathBehavior::on_deactivate(const std::shared_ptr<std::string> & message)
+bool CentralizeMarkerBehavior::on_deactivate(const std::shared_ptr<std::string> & message)
 {
   return follow_path_plugin_->on_deactivate(message);
 }
 
-bool FollowPathBehavior::on_pause(const std::shared_ptr<std::string> & message)
+bool CentralizeMarkerBehavior::on_pause(const std::shared_ptr<std::string> & message)
 {
   return follow_path_plugin_->on_pause(message);
 }
 
-bool FollowPathBehavior::on_resume(const std::shared_ptr<std::string> & message)
+bool CentralizeMarkerBehavior::on_resume(const std::shared_ptr<std::string> & message)
 {
   return follow_path_plugin_->on_resume(message);
 }
 
-as2_behavior::ExecutionStatus FollowPathBehavior::on_run(
+as2_behavior::ExecutionStatus CentralizeMarkerBehavior::on_run(
   const std::shared_ptr<const as2_msgs::action::FollowPath::Goal> & goal,
   std::shared_ptr<as2_msgs::action::FollowPath::Feedback> & feedback_msg,
   std::shared_ptr<as2_msgs::action::FollowPath::Result> & result_msg)
@@ -212,7 +175,7 @@ as2_behavior::ExecutionStatus FollowPathBehavior::on_run(
   return follow_path_plugin_->on_run(goal, feedback_msg, result_msg);
 }
 
-void FollowPathBehavior::on_execution_end(const as2_behavior::ExecutionStatus & state)
+void CentralizeMarkerBehavior::on_execution_end(const as2_behavior::ExecutionStatus & state)
 {
   return follow_path_plugin_->on_execution_end(state);
 }
@@ -222,4 +185,4 @@ void FollowPathBehavior::on_execution_end(const as2_behavior::ExecutionStatus & 
 // Register the component with class_loader.
 // This acts as a sort of entry point, allowing the component to be discoverable when its library
 // is being loaded into a running process.
-RCLCPP_COMPONENTS_REGISTER_NODE(FollowPathBehavior)
+RCLCPP_COMPONENTS_REGISTER_NODE(CentralizeMarkerBehavior)

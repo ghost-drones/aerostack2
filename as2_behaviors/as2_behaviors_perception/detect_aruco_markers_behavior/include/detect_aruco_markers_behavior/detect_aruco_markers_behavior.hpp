@@ -59,6 +59,7 @@
 #include <image_transport/image_transport.hpp>
 #include <opencv2/aruco.hpp>
 #include <opencv2/calib3d.hpp>
+#include <tf2_ros/transform_broadcaster.h>
 
 class DetectArucoMarkersBehavior
   : public as2_behavior::BehaviorServer<as2_msgs::action::DetectArucoMarkers>
@@ -118,6 +119,8 @@ private:
     const std::shared_ptr<const as2_msgs::action::DetectArucoMarkers::Goal> & goal,
     std::shared_ptr<as2_msgs::action::DetectArucoMarkers::Feedback> & feedback_msg,
     std::shared_ptr<as2_msgs::action::DetectArucoMarkers::Result> & result_msg) override;
+
+  std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
   void on_execution_end(const as2_behavior::ExecutionStatus & state) override;
 };

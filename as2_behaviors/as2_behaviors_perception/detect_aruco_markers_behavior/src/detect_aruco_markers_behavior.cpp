@@ -35,12 +35,16 @@
  ********************************************************************************/
 
 #include "detect_aruco_markers_behavior.hpp"
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
+#include <tf2_ros/transform_broadcaster.h>
+#include <chrono>
 
 DetectArucoMarkersBehavior::DetectArucoMarkersBehavior()
 : as2_behavior::BehaviorServer<as2_msgs::action::DetectArucoMarkers>(
     "detect_aruco_markers_behavior")
 {
   loadParameters();
+  tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
 }
 
 void DetectArucoMarkersBehavior::setup()
@@ -240,6 +244,17 @@ void DetectArucoMarkersBehavior::imageCallback(const sensor_msgs::msg::Image::Sh
       pose.pose.pose.orientation.w = static_cast<double>(rot.w());
 
       aruco_pose_array.poses.push_back(pose);
+
+      geometry_msgs::msg::TransformStamped tf_msg;
+      tf_msg.header.stamp = img->header.stamp;
+      tf_msg.header.frame_id = img->header.frame_id + "/optical_frame";
+      tf_msg.child_frame_id = "aruco_" + std::to_string(id);
+      tf_msg.transform.translation.x = pose.pose.pose.position.x;
+      tf_msg.transform.translation.y = pose.pose.pose.position.y;
+      tf_msg.transform.translation.z = pose.pose.pose.position.z;
+      tf_msg.transform.rotation = pose.pose.pose.orientation;
+
+      tf_broadcaster_->sendTransform(tf_msg);
     }
   }
   aruco_pose_pub_->publish(aruco_pose_array);

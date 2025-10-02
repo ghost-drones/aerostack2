@@ -50,11 +50,30 @@ void GoToAction::on_tick()
 {
   getInput("max_speed", goal_.max_speed);
   getInput("yaw_angle", goal_.yaw.angle);
-  getInput(
-    "yaw_mode",
-    goal_.yaw.mode);        // TODO(pariaspe): runtime warning, called
-                            // BT::convertFromString() for type [unsigned char]
-  getInput<geometry_msgs::msg::PointStamped>("pose", goal_.target_pose);
+  getInput("yaw_mode", goal_.yaw.mode);
+
+  geometry_msgs::msg::PointStamped base_pose;
+  geometry_msgs::msg::PointStamped offset;
+
+  // pega pose base
+  if (!getInput("pose", base_pose)) {
+    throw BT::RuntimeError("GoToAction: missing required input [pose]");
+  }
+
+  // pega offset (pode ser opcional)
+  if (!getInput("offset", offset)) {
+    RCLCPP_WARN(node_->get_logger(), "GoToAction: no [offset] provided, using 0,0,0");
+    offset.point.x = offset.point.y = offset.point.z = 0.0;
+  }
+
+  // soma pose + offset
+  geometry_msgs::msg::PointStamped result_pose = base_pose;
+  result_pose.point.x += offset.point.x;
+  result_pose.point.y += offset.point.y;
+  result_pose.point.z += offset.point.z;
+
+  // coloca no goal
+  goal_.target_pose = result_pose;
 }
 
 void GoToAction::on_wait_for_result(

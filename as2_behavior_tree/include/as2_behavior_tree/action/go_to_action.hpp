@@ -70,6 +70,7 @@ public:
   {
     return providedBasicPorts(
       {BT::InputPort<double>("max_speed"), BT::InputPort<double>("yaw_angle"),
+        BT::InputPort<geometry_msgs::msg::PointStamped>("offset"),
         BT::InputPort<geometry_msgs::msg::PointStamped>("pose"),
         BT::InputPort<int>("yaw_mode")});
   }
