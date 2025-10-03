@@ -1,5 +1,5 @@
 #include "as2_core/core_functions.hpp"
-#include "centralize_marker_behavior/centralize_marker_behavior.hpp"
+#include "centralize_marker/centralize_marker_behavior.hpp"
 
 int main(int argc, char * argv[])
 {
