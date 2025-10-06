@@ -1,0 +1,7 @@
+/**:
+  ros__parameters:
+    aruco_timeout_threshold: 10 # seconds
+    landing_radius: 1 # meters
+    v_constant_descent: 0.5 # meters/second
+    z_distance_thresshold: 0.3 # meters
+    tf_timeout_threshold: 0.1 # Default tf timeout (100ms)
