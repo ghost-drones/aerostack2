@@ -20,7 +20,7 @@ PrecisionLandingBehavior::PrecisionLandingBehavior(const rclcpp::NodeOptions& op
     this->~PrecisionLandingBehavior();
   }
   try {
-    this->declare_parameter<std::string>("aruco_timeout_threshold");
+    this->declare_parameter<double>("aruco_timeout_threshold");
   } catch (const rclcpp::ParameterTypeException & e) {
     RCLCPP_FATAL(
       this->get_logger(),
@@ -41,7 +41,7 @@ PrecisionLandingBehavior::PrecisionLandingBehavior(const rclcpp::NodeOptions& op
   }
 
   loader_ = std::make_shared<pluginlib::ClassLoader<precision_landing_base::PrecisionLandingBase>>(
-    "precision_landing_behavior",
+    "as2_behaviors_motion",
     "precision_landing_base::PrecisionLandingBase");
 
   tf_handler_ = std::make_shared<as2::tf::TfHandler>(this);
