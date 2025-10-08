@@ -5,7 +5,8 @@
  * @file precision_landing_base.hpp
  *
  * Base class for precision landing plugins header
- */
+ * OK Lucca 08/10
+ */ 
 
 #ifndef PRECISION_LANDING_BEHAVIOR__PRECISION_LANDING_BASE_HPP_
 #define PRECISION_LANDING_BEHAVIOR__PRECISION_LANDING_BASE_HPP_
@@ -32,7 +33,7 @@
 namespace precision_landing_base
 {
 
-struct PrecisionLandingParams
+struct precision_landing_params
 {
   double aruco_timeout_threshold   = 10.0; // s
   double landing_radius            = 1.0;  // m
@@ -52,7 +53,7 @@ public:
 
   void initialize(as2::Node* node_ptr,
                   std::shared_ptr<as2::tf::TfHandler> tf_handler,
-                  PrecisionLandingParams& params)
+                  precision_landing_params& params)
   {
     node_ptr_  = node_ptr;
     tf_handler_ = tf_handler;
@@ -62,21 +63,26 @@ public:
     ownInit();
   }
 
-  // Atualização de estado (pose/twist do drone em earth)
   virtual void state_callback(geometry_msgs::msg::PoseStamped& pose_msg,
                               geometry_msgs::msg::TwistStamped& twist_msg)
   {
-    actual_pose_  = pose_msg;
-    actual_twist_ = twist_msg;
+    actual_pose_ = pose_msg;
+
+    feedback_.precision_landing_speed = actual_pose_.pose.position.z;
+    feedback_.precision_landing_height = twist_msg.twist.linear.z;
+    // TODO: distance_to_target
+
     localization_flag_ = true;
+    return;
   }
 
   bool on_activate(std::shared_ptr<const as2_msgs::action::PrecisionLanding::Goal> goal)
   {
-    auto goal_copy = *goal;
-    if (!processGoal(goal_copy)) { return false; }
-    if (own_activate(goal_copy)) {
-      goal_ = goal_copy;
+    as2_msgs::action::PrecisionLanding::Goal goal_candidate = *goal;
+    if (!processGoal(goal_candidate)) {return false;}
+
+    if (own_activate(goal_candidate)) {
+      goal_ = goal_candidate;
       return true;
     }
     return false;
@@ -84,10 +90,11 @@ public:
 
   bool on_modify(std::shared_ptr<const as2_msgs::action::PrecisionLanding::Goal> goal)
   {
-    auto goal_copy = *goal;
-    if (!processGoal(goal_copy)) { return false; }
-    if (own_modify(goal_copy)) {
-      goal_ = goal_copy;
+    as2_msgs::action::PrecisionLanding::Goal goal_candidate = *goal;
+    if (!processGoal(goal_candidate)) {return false;}
+
+    if (own_modify(goal_candidate)) {
+      goal_ = goal_candidate;
       return true;
     }
     return false;
@@ -112,6 +119,7 @@ public:
   {
     localization_flag_ = false;
     own_execution_end(state);
+    return;
   }
 
   as2_behavior::ExecutionStatus on_run(
@@ -119,74 +127,84 @@ public:
       std::shared_ptr<as2_msgs::action::PrecisionLanding::Feedback>& feedback_msg,
       std::shared_ptr<as2_msgs::action::PrecisionLanding::Result>&   result_msg)
   {
-    auto status = own_run();
+    as2_behavior::ExecutionStatus status = own_run();
+    
     feedback_msg = std::make_shared<as2_msgs::action::PrecisionLanding::Feedback>(feedback_);
     result_msg   = std::make_shared<as2_msgs::action::PrecisionLanding::Result>(result_);
     return status;
   }
 
-protected:
-  // Helpers
-  inline void sendHover() { hover_motion_handler_->sendHover(); }
+private:
+  bool processGoal(as2_msgs::action::PrecisionLanding::Goal & _goal)
+  {
+    if (!localization_flag_) {
+      RCLCPP_ERROR(node_ptr_->get_logger(), "Behavior reject, there is no localization");
+      return false;
+    }
 
-  // Interface de plugin
+    return true;
+  }
+
+private:
+  std::shared_ptr<as2::motionReferenceHandlers::HoverprocessGoalMotion> hover_motion_handler_ = nullptr;
+
+  /* Interface with plugin */
+
+protected:
   virtual void ownInit() {}
+
   virtual bool own_activate(as2_msgs::action::PrecisionLanding::Goal& goal) = 0;
 
-  virtual bool own_modify(as2_msgs::action::PrecisionLanding::Goal& /*goal*/)
+  virtual bool own_modify(as2_msgs::action::PrecisionLanding::Goal& goal)
   {
     RCLCPP_INFO(node_ptr_->get_logger(),
-                "PrecisionLanding goal modification not implemented");
+                "PrecisionLanding can not be modified, not implemented");
     return false;
   }
 
   virtual bool own_deactivate(const std::shared_ptr<std::string>& message) = 0;
 
-  virtual bool own_pause(const std::shared_ptr<std::string>& /*message*/)
+  virtual bool own_pause(const std::shared_ptr<std::string>& message)
   {
     RCLCPP_INFO(node_ptr_->get_logger(),
-                "PrecisionLanding pause not implemented, try cancel");
+                "PrecisionLanding can not be paused, not implemented, try to cancel it");
     return false;
   }
 
-  virtual bool own_resume(const std::shared_ptr<std::string>& /*message*/)
+  virtual bool own_resume(const std::shared_ptr<std::string>& message)
   {
     RCLCPP_INFO(node_ptr_->get_logger(),
-                "PrecisionLanding resume not implemented");
+                "PrecisionLanding can not be resumed, not implemented");
     return false;
   }
 
   virtual void own_execution_end(const as2_behavior::ExecutionStatus& state) = 0;
   virtual as2_behavior::ExecutionStatus own_run() = 0;
 
-  // Valida pré-condições simples
-  bool processGoal(as2_msgs::action::PrecisionLanding::Goal& /*goal*/)
+  inline void sendHover()
   {
-    if (!localization_flag_) {
-      RCLCPP_ERROR(node_ptr_->get_logger(),
-                   "Behavior rejected: no localization");
-      return false;
-    }
-    return true;
+    hover_motion_handler_->sendHover();
+    return;
+  }
+
+  inline float getActualYaw()
+  {
+    return as2::frame::getYawFromQuaternion(actual_pose_.pose.orientation);
   }
 
 protected:
   as2::Node* node_ptr_{nullptr};
   std::shared_ptr<as2::tf::TfHandler> tf_handler_{nullptr};
 
-  std::shared_ptr<as2::motionReferenceHandlers::HoverMotion> hover_motion_handler_{nullptr};
-
   as2_msgs::action::PrecisionLanding::Goal    goal_;
   as2_msgs::action::PrecisionLanding::Feedback feedback_;
   as2_msgs::action::PrecisionLanding::Result   result_;
 
-  PrecisionLandingParams params_;
-
+  precision_landing_params params_;
   geometry_msgs::msg::PoseStamped  actual_pose_;
   geometry_msgs::msg::TwistStamped actual_twist_;
   bool localization_flag_{false};
-};
-
+}; // class PrecisionLandingBase
 } // namespace precision_landing_base
 
 #endif // PRECISION_LANDING_BEHAVIOR__PRECISION_LANDING_BASE_HPP_
