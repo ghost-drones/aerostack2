@@ -156,6 +156,7 @@ install(TARGETS
   land_component
   go_to_component
   follow_path_component
+  precision_landing_component
   follow_reference_component
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib

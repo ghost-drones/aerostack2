@@ -11,3 +11,4 @@ float32 precision_landing_speed       # actual speed (m/s)
 float32 precision_landing_height      # actual height (m)
 float32 distance_xy                   # distance to target in xy (m)
 float32 distance_z                    # distance to target in z (m)
+string marker_frame_id                # marker frame ID

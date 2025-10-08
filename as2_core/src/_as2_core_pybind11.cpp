@@ -126,4 +126,5 @@ PYBIND11_MODULE(as2_names, m) {
   m_actions.attr("followpath") = as2_names::actions::behaviors::followpath;
   m_actions.attr("land") = as2_names::actions::behaviors::land;
   m_actions.attr("trajectorygenerator") = as2_names::actions::behaviors::trajectorygenerator;
+  m_actions.attr("precisionlanding") = as2_names::actions::behaviors::precisionlanding;
 }

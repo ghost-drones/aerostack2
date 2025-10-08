@@ -33,13 +33,10 @@
 namespace precision_landing_base
 {
 
-struct precision_landing_params
+struct precision_landing_plugin_params
 {
   double aruco_timeout_threshold   = 10.0; // s
-  double landing_radius            = 1.0;  // m
-  double v_constant_descent        = 0.5;  // m/s
-  double z_distance_thresshold     = 0.3;  // m
-  double tf_timeout_threshold      = 0.1;  // s
+  double tf_timeout_threshold   = 10.0; // s
 };
 
 class PrecisionLandingBase
@@ -53,7 +50,7 @@ public:
 
   void initialize(as2::Node* node_ptr,
                   std::shared_ptr<as2::tf::TfHandler> tf_handler,
-                  precision_landing_params& params)
+                  precision_landing_plugin_params& params)
   {
     node_ptr_  = node_ptr;
     tf_handler_ = tf_handler;
@@ -146,7 +143,7 @@ private:
   }
 
 private:
-  std::shared_ptr<as2::motionReferenceHandlers::HoverprocessGoalMotion> hover_motion_handler_ = nullptr;
+  std::shared_ptr<as2::motionReferenceHandlers::HoverMotion> hover_motion_handler_ = nullptr;
 
   /* Interface with plugin */
 
@@ -200,7 +197,7 @@ protected:
   as2_msgs::action::PrecisionLanding::Feedback feedback_;
   as2_msgs::action::PrecisionLanding::Result   result_;
 
-  precision_landing_params params_;
+  precision_landing_plugin_params params_;
   geometry_msgs::msg::PoseStamped  actual_pose_;
   geometry_msgs::msg::TwistStamped actual_twist_;
   bool localization_flag_{false};

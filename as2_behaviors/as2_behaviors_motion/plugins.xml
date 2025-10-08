@@ -32,4 +32,7 @@
   <class type="takeoff_plugin_trajectory::Plugin" base_class_type="takeoff_base::TakeoffBase">
     <description>Takeoff done with trajectory generator.</description>
   </class>
+  <class type="precision_landing_plugin_vconstant::Plugin" base_class_type="precision_landing_base::PrecisionLandingBase">
+    <description>Precision Landing done with vconstant strategy.</description>
+  </class>
 </library>

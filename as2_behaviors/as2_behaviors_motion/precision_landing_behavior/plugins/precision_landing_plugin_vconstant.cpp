@@ -4,7 +4,7 @@
  *
  * Plugin: dentro do raio XY, desce a v constante; fora do raio, corrige XY.
  * Usa somente SpeedMotion.
- * OK Lucca 08/10
+ * OK Lucca 08/10 (rev: integração com tf_handler_ igual ao LandBehavior)
  */
 
 #include <pluginlib/class_list_macros.hpp>
@@ -20,33 +20,30 @@ namespace precision_landing_plugin_vconstant
 class Plugin : public precision_landing_base::PrecisionLandingBase
 {
 public:
-  void ownInit()
+  void ownInit() override
   {
     speed_motion_handler_ = std::make_shared<as2::motionReferenceHandlers::SpeedMotion>(node_ptr_);
 
-    node_ptr_->declare_parameter<std::string>("marker_frame_id");
-    node_ptr_->get_parameter("marker_frame_id", marker_frame_id);
+    node_ptr_->declare_parameter<std::string>("marker_frame_id", "aruco");
+    node_ptr_->get_parameter("marker_frame_id", marker_frame_id_);
 
-    node_ptr_->declare_parameter<double>("vconstant_descent");
-    node_ptr_->get_parameter("vconstant_descent", vconstant_descent);
-    node_ptr_->declare_parameter<double>("vconstant_landing_radius");
-    node_ptr_->get_parameter("vconstant_landing_radius", vconstant_landing_radius);
-    node_ptr_->declare_parameter<double>("vconstant_z_distance_threshold");
-    node_ptr_->get_parameter("vconstant_z_distance_threshold", vconstant_z_distance_threshold);
-    node_ptr_->declare_parameter<double>("vconstant_xy_gain");
-    node_ptr_->get_parameter("vconstant_xy_gain", vconstant_xy_gain);
-    node_ptr_->declare_parameter<double>("vconstant_xy_speed_max");
-    node_ptr_->get_parameter("vconstant_xy_speed_max", vconstant_xy_speed_max);
+    node_ptr_->declare_parameter<double>("vconstant_descent", 0.5);
+    node_ptr_->get_parameter("vconstant_descent", vconstant_descent_);
+    node_ptr_->declare_parameter<double>("vconstant_landing_radius", 0.3);
+    node_ptr_->get_parameter("vconstant_landing_radius", vconstant_landing_radius_);
+    node_ptr_->declare_parameter<double>("vconstant_z_distance_threshold", 0.1);
+    node_ptr_->get_parameter("vconstant_z_distance_threshold", vconstant_z_distance_threshold_);
+    node_ptr_->declare_parameter<double>("vconstant_xy_gain", 1.0);
+    node_ptr_->get_parameter("vconstant_xy_gain", vconstant_xy_gain_);
+    node_ptr_->declare_parameter<double>("vconstant_xy_speed_max", 1.0);
+    node_ptr_->get_parameter("vconstant_xy_speed_max", vconstant_xy_speed_max_);
 
-    last_aruco_ok_ = false;
-    last_aruco_time_ = node_ptr_->now();
+    resetArucoStatus();
   }
 
-  bool own_activate(as2_msgs::action::PrecisionLanding::Goal& goal) override
+  bool own_activate(as2_msgs::action::PrecisionLanding::Goal& _goal) override
   {
     RCLCPP_INFO(node_ptr_->get_logger(), "[vconstant] Precision Landing accepted");
-    RCLCPP_INFO(node_ptr_->get_logger(), "Land with Z speed: %f", goal.vconstant_descent);
-    RCLCPP_INFO(node_ptr_->get_logger(), "Land with max XY speed: %f", goal.vconstant_xy_speed_max);
     resetArucoStatus();
     return true;
   }
@@ -75,7 +72,8 @@ public:
   void own_execution_end(const as2_behavior::ExecutionStatus& state) override
   {
     RCLCPP_INFO(node_ptr_->get_logger(), "[vconstant] Precision Landing end");
-    if (state != as2_behavior::ExecutionStatus::SUCCESS) sendHover();
+    if (state != as2_behavior::ExecutionStatus::SUCCESS)
+      sendHover();
   }
 
   as2_behavior::ExecutionStatus own_run() override
@@ -115,7 +113,7 @@ public:
 private:
   std::shared_ptr<as2::motionReferenceHandlers::SpeedMotion> speed_motion_handler_{nullptr};
 
-  std::string marker_frame_id_{marker_frame_id};
+  std::string marker_frame_id_{"aruco"};
   double vconstant_descent_{0.5};
   double vconstant_landing_radius_{0.3};
   double vconstant_z_distance_threshold_{0.1};
@@ -126,7 +124,6 @@ private:
   rclcpp::Time last_aruco_time_;
 
 private:
-
   void resetArucoStatus()
   {
     last_aruco_ok_ = false;
@@ -135,16 +132,26 @@ private:
 
   bool tryGetArucoTF(geometry_msgs::msg::TransformStamped& tf_out)
   {
-    try {
-      tf_out = tf_handler_->lookupTransform(
-          "earth", marker_frame_id_, tf2::TimePointZero,
-          rclcpp::Duration::from_seconds(params_.tf_timeout_threshold));
-      last_aruco_ok_ = true;
-      last_aruco_time_ = node_ptr_->now();
-      return true;
-    } catch (const tf2::TransformException&) {
-      return false;
+    const std::string target_frame = "earth";
+    const std::string source_frame = marker_frame_id_;
+    const double timeout_s = params_.aruco_timeout_threshold;
+
+    rclcpp::Time start_time = node_ptr_->now();
+    while ((node_ptr_->now() - start_time).seconds() < timeout_s) {
+      try {
+        tf_out = tf_handler_->getTransform(target_frame, source_frame);
+        last_aruco_ok_ = true;
+        last_aruco_time_ = node_ptr_->now();
+        return true;
+      } catch (const tf2::TransformException& ex) {
+        rclcpp::sleep_for(std::chrono::milliseconds(100));
+      }
     }
+
+    RCLCPP_WARN(node_ptr_->get_logger(),
+                "[vconstant] Timeout waiting for TF (%s -> %s) after %.2f s",
+                source_frame.c_str(), target_frame.c_str(), timeout_s);
+    return false;
   }
 
   bool arucoTimeoutExceeded() const
@@ -197,7 +204,8 @@ private:
     }
     return ok;
   }
-};  // Plugin class
+};
+
 } // namespace precision_landing_plugin_vconstant
 
 PLUGINLIB_EXPORT_CLASS(precision_landing_plugin_vconstant::Plugin,

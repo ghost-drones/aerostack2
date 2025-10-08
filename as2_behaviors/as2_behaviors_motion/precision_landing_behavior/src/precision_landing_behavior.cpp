@@ -7,7 +7,7 @@
 
 PrecisionLandingBehavior::PrecisionLandingBehavior(const rclcpp::NodeOptions& options)
   : as2_behavior::BehaviorServer<as2_msgs::action::PrecisionLanding>(
-        as2_names::actions::behaviors::precision_landing, options)
+        as2_names::actions::behaviors::precisionlanding, options)
 {
   try {
     this->declare_parameter<std::string>("plugin_name");
@@ -29,6 +29,16 @@ PrecisionLandingBehavior::PrecisionLandingBehavior(const rclcpp::NodeOptions& op
       e.what());
     this->~PrecisionLandingBehavior();
   }
+  try {
+    this->declare_parameter<double>("tf_timeout_threshold");
+  } catch (const rclcpp::ParameterTypeException & e) {
+    RCLCPP_FATAL(
+      this->get_logger(),
+      "Launch argument <tf_timeout_threshold> not defined or "
+      "malformed: %s",
+      e.what());
+    this->~PrecisionLandingBehavior();
+  }
 
   loader_ = std::make_shared<pluginlib::ClassLoader<precision_landing_base::PrecisionLandingBase>>(
     "precision_landing_behavior",
@@ -43,6 +53,7 @@ PrecisionLandingBehavior::PrecisionLandingBehavior(const rclcpp::NodeOptions& op
 
     precision_landing_base::precision_landing_plugin_params params;
     params.aruco_timeout_threshold = this->get_parameter("aruco_timeout_threshold").as_double();
+    params.tf_timeout_threshold = this->get_parameter("tf_timeout_threshold").as_double();
 
     precision_landing_plugin_->initialize(this, tf_handler_, params);
     RCLCPP_INFO(this->get_logger(), "PRECISION LANDING BEHAVIOR PLUGIN LOADED: %s", plugin_name.c_str());
@@ -54,7 +65,6 @@ PrecisionLandingBehavior::PrecisionLandingBehavior(const rclcpp::NodeOptions& op
   }
 
   base_link_frame_id_ = as2::tf::generateTfName(this, "base_link");
-
 
   platform_disarm_cli_ = std::make_shared<as2::SynchronousServiceClient<std_srvs::srv::SetBool>>(
     as2_names::services::platform::set_arming_state, this);
@@ -84,6 +94,16 @@ void PrecisionLandingBehavior::state_callback(const geometry_msgs::msg::TwistSta
   return;
 }
 
+bool PrecisionLandingBehavior::sendEventFSME(const int8_t _event)
+{
+  as2_msgs::srv::SetPlatformStateMachineEvent::Request set_platform_fsm_req;
+  as2_msgs::srv::SetPlatformStateMachineEvent::Response set_platform_fsm_resp;
+  set_platform_fsm_req.event.event = _event;
+  auto out = platform_land_cli_->sendRequest(set_platform_fsm_req, set_platform_fsm_resp, 3);
+  if (out && set_platform_fsm_resp.success) {return true;}
+  return false;
+}
+
 bool PrecisionLandingBehavior::sendDisarm()
 {
   RCLCPP_INFO(this->get_logger(), "Disarming platform");
@@ -97,8 +117,8 @@ bool PrecisionLandingBehavior::sendDisarm()
 }
 
 bool PrecisionLandingBehavior::process_goal(
-  std::shared_ptr<const as2_msgs::action::PrecisionLandingBehavior::Goal> goal,
-  as2_msgs::action::PrecisionLandingBehavior::Goal & new_goal)
+  std::shared_ptr<const as2_msgs::action::PrecisionLanding::Goal> goal,
+  as2_msgs::action::PrecisionLanding::Goal & new_goal)
 {
   /**
   * Precisa melhorar isso. A action precisa ser recusada se não tiver um TF
@@ -114,7 +134,7 @@ bool PrecisionLandingBehavior::on_activate(
   if (!process_goal(goal, new_goal)) {
     return false;
   }
-  return precision_landing_plugin_->on_activate(std::make_shared<const as2_msgs::action::PrecisionLanding::Goal>(new_goal))
+  return precision_landing_plugin_->on_activate(std::make_shared<const as2_msgs::action::PrecisionLanding::Goal>(new_goal));
 }
 
 bool PrecisionLandingBehavior::on_modify(
