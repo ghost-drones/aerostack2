@@ -1,7 +1,122 @@
 /**:
-    ros__parameters:
-        aruco_size: 0.25 # meters
-        camera_model: "pinhole"
-        camera_qos_reliable: true
-        camera_image_topic: "/x500_px4/sensor_measurements/downward_cam/image_raw"
-        camera_info_topic: "/x500_px4/sensor_measurements/downward_cam/camera_info"
+  ros__parameters:
+    aruco_size_default: 0.25            # Default marker size in meters
+    camera_model: "pinhole"
+    camera_qos_reliable: true
+    camera_image_topic: "/x500_px4/sensor_measurements/downward_cam/image_raw"
+    camera_info_topic: "/x500_px4/sensor_measurements/downward_cam/camera_info"
+
+    # Marker sizes (ID → size)
+    aruco_sizes_6:   0.56
+
+    # XX7
+    aruco_sizes_7:   0.28
+    aruco_sizes_17:  0.28
+    aruco_sizes_107: 0.28
+    aruco_sizes_117: 0.28
+    aruco_sizes_207: 0.28
+    aruco_sizes_217: 0.28
+
+    # XX8
+    aruco_sizes_8:   0.12
+    aruco_sizes_18:  0.12
+    aruco_sizes_28:  0.12
+    aruco_sizes_38:  0.12
+    aruco_sizes_48:  0.12
+    aruco_sizes_58:  0.12
+    aruco_sizes_68:  0.12
+    aruco_sizes_78:  0.12
+    aruco_sizes_108: 0.12
+    aruco_sizes_118: 0.12
+    aruco_sizes_128: 0.12
+    aruco_sizes_138: 0.12
+    aruco_sizes_148: 0.12
+    aruco_sizes_158: 0.12
+    aruco_sizes_168: 0.12
+    aruco_sizes_178: 0.12
+
+    # XX9
+    aruco_sizes_9:   0.07
+    aruco_sizes_19:  0.07
+    aruco_sizes_29:  0.07
+    aruco_sizes_39:  0.07
+    aruco_sizes_49:  0.07
+    aruco_sizes_59:  0.07
+    aruco_sizes_69:  0.07
+    aruco_sizes_79:  0.07
+    aruco_sizes_109: 0.07
+    aruco_sizes_119: 0.07
+    aruco_sizes_129: 0.07
+    aruco_sizes_139: 0.07
+    aruco_sizes_149: 0.07
+    aruco_sizes_159: 0.07
+    aruco_sizes_169: 0.07
+    aruco_sizes_209: 0.07
+    aruco_sizes_219: 0.07
+    aruco_sizes_229: 0.07
+    aruco_sizes_239: 0.07
+    aruco_sizes_249: 0.07
+    aruco_sizes_259: 0.07
+    aruco_sizes_269: 0.07
+    aruco_sizes_279: 0.07
+    aruco_sizes_309: 0.07
+    aruco_sizes_319: 0.07
+    aruco_sizes_329: 0.07
+    aruco_sizes_339: 0.07
+    aruco_sizes_349: 0.07
+    aruco_sizes_359: 0.07
+    aruco_sizes_369: 0.07
+
+    # XX2
+    aruco_sizes_102: 0.07
+    aruco_sizes_202: 0.07
+    aruco_sizes_302: 0.07
+    aruco_sizes_402: 0.07
+    aruco_sizes_502: 0.07
+    aruco_sizes_602: 0.07
+    aruco_sizes_702: 0.07
+    aruco_sizes_802: 0.07
+    aruco_sizes_902: 0.07
+
+    # XX3
+    aruco_sizes_103: 0.07
+    aruco_sizes_203: 0.07
+    aruco_sizes_303: 0.07
+    aruco_sizes_403: 0.07
+    aruco_sizes_503: 0.07
+    aruco_sizes_603: 0.07
+    aruco_sizes_703: 0.07
+    aruco_sizes_803: 0.07
+    aruco_sizes_903: 0.07
+
+    # XX4
+    aruco_sizes_104: 0.07
+    aruco_sizes_204: 0.07
+    aruco_sizes_304: 0.07
+    aruco_sizes_404: 0.07
+    aruco_sizes_504: 0.07
+    aruco_sizes_604: 0.07
+    aruco_sizes_704: 0.07
+    aruco_sizes_804: 0.07
+    aruco_sizes_904: 0.07
+
+    # XX5
+    aruco_sizes_105: 0.07
+    aruco_sizes_205: 0.07
+    aruco_sizes_305: 0.07
+    aruco_sizes_405: 0.07
+    aruco_sizes_505: 0.07
+    aruco_sizes_605: 0.07
+    aruco_sizes_705: 0.07
+    aruco_sizes_805: 0.07
+    aruco_sizes_905: 0.07
+
+    # Sloped XX0
+    aruco_sizes_0:   0.1275
+    aruco_sizes_100: 0.1275
+    aruco_sizes_200: 0.1275
+    aruco_sizes_300: 0.1275
+    aruco_sizes_400: 0.1275
+    aruco_sizes_500: 0.1275
+    aruco_sizes_600: 0.1275
+    aruco_sizes_700: 0.1275

@@ -82,7 +82,7 @@ private:
   std::shared_ptr<as2::sensors::Camera> aruco_img_transport_;
 
   std::vector<uint16_t> target_ids_;
-  float aruco_size_;
+  float aruco_size_default_;
   std::string camera_model_;
   std::string distorsion_model_;
   bool camera_qos_reliable_;
@@ -93,6 +93,7 @@ private:
   std::string img_encoding_;
   std::string camera_image_topic_ = "camera/image_raw";
   std::string camera_info_topic_ = "camera/camera_info";
+  std::unordered_map<int, float> aruco_sizes_;
 
   void loadParameters();
   void setup();
