@@ -207,13 +207,23 @@ void DetectArucoMarkersBehavior::imageCallback(const sensor_msgs::msg::Image::Sh
       pose.pose.pose.position.z = tvec[2];
 
       tf2::Quaternion rot;
-      rot.setRPY(rvec[2], rvec[0], rvec[1]);
-      rot.normalize();
+      cv::Mat rot_mat;
+      cv::Rodrigues(rvec, rot_mat);
 
-      pose.pose.pose.orientation.x = static_cast<double>(rot.x());
-      pose.pose.pose.orientation.y = static_cast<double>(rot.y());
-      pose.pose.pose.orientation.z = static_cast<double>(rot.z());
-      pose.pose.pose.orientation.w = static_cast<double>(rot.w());
+      tf2::Matrix3x3 tf_rot(
+          rot_mat.at<double>(0, 0), rot_mat.at<double>(0, 1), rot_mat.at<double>(0, 2),
+          rot_mat.at<double>(1, 0), rot_mat.at<double>(1, 1), rot_mat.at<double>(1, 2),
+          rot_mat.at<double>(2, 0), rot_mat.at<double>(2, 1), rot_mat.at<double>(2, 2)
+      );
+
+      tf2::Quaternion rot_quat;
+      tf_rot.getRotation(rot_quat);
+      rot_quat.normalize();
+
+      pose.pose.pose.orientation.x = rot_quat.x();
+      pose.pose.pose.orientation.y = rot_quat.y();
+      pose.pose.pose.orientation.z = rot_quat.z();
+      pose.pose.pose.orientation.w = rot_quat.w();
       aruco_pose_array.poses.push_back(pose);
 
       geometry_msgs::msg::TransformStamped tf_msg;
@@ -226,7 +236,6 @@ void DetectArucoMarkersBehavior::imageCallback(const sensor_msgs::msg::Image::Sh
       tf_msg.transform.rotation = pose.pose.pose.orientation;
 
       tf_broadcaster_->sendTransform(tf_msg);
-      RCLCPP_DEBUG(this->get_logger(), "TF published for aruco_%d", id);
     }
 
     aruco_pose_pub_->publish(aruco_pose_array);
