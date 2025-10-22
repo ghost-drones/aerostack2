@@ -1,4 +1,4 @@
-set(EXECUTABLE_NAME detect_ariel_marker_behavior)
+set(EXECUTABLE_NAME detect_landing_pad_behavior)
 
 # Find dependencies
 set(EXECUTABLE_DEPENDENCIES
