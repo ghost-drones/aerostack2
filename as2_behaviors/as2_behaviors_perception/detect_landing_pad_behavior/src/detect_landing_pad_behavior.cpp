@@ -49,13 +49,13 @@ void DetectLandingPadBehavior::loadParameters()
 
   auto node_params = this->list_parameters({}, 10);
   for (const auto &name : node_params.names) {
-    if (name.rfind("aruco_size_", 0) == 0) {
+    if (name.rfind("aruco_sizes_", 0) == 0) {
       double size;
       if (this->get_parameter(name, size)) {
-        std::string key = name.substr(std::string("aruco_size_").length());
+        std::string key = name.substr(std::string("aruco_sizes_").length());
         try {
           int id = std::stoi(key);
-          aruco_size_[id] = static_cast<float>(size);
+          aruco_sizes_[id] = static_cast<float>(size);
         } catch (const std::exception &) {
           RCLCPP_WARN(get_logger(), "Invalid key: %s", key.c_str());
         }
@@ -63,7 +63,7 @@ void DetectLandingPadBehavior::loadParameters()
     }
   }
 
-  RCLCPP_INFO(get_logger(), "Loaded %zu ArUco marker sizes", aruco_size_.size());
+  RCLCPP_INFO(get_logger(), "Loaded %zu ArUco marker sizes", aruco_sizes_.size());
   RCLCPP_INFO(get_logger(), "Default size: %.3f m", aruco_size_default_);
 
   aruco_dict_ = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_ARUCO_ORIGINAL);
@@ -143,8 +143,8 @@ void DetectLandingPadBehavior::imageCallback(const sensor_msgs::msg::Image::Shar
     for (size_t i = 0; i < marker_ids.size(); ++i) {
       int id = marker_ids[i];
       float marker_size = aruco_size_default_;
-      auto it = aruco_size_.find(id);
-      if (it != aruco_size_.end()) {
+      auto it = aruco_sizes_.find(id);
+      if (it != aruco_sizes_.end()) {
         marker_size = it->second;
       }
 

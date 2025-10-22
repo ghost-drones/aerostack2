@@ -1,25 +1,18 @@
-"""Launch file for landing pad detector and multi static transform broadcaster."""
+"""Launch file for landing pad detector node only."""
 
 import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    """Launch both landing pad detector and static transform broadcaster."""
-    pkg_share = get_package_share_directory('as2_behaviors_perception')
-    behavior_dir = os.path.join(pkg_share, 'detect_landing_pad_behavior')
-
-    detector_config = os.path.join(behavior_dir, 'config/params.yaml')
-    tf_config = os.path.join(
-        behavior_dir, 'config/ariel_static_transforms.yaml')
-    tf_launch = os.path.join(
-        pkg_share, 'launch/multi_static_tf_broadcaster.launch.py')
+    """Launch only the landing pad detector node."""
+    config = os.path.join(get_package_share_directory('as2_behaviors_perception'),
+                          'detect_landing_pad_behavior/config/params.yaml')
 
     return LaunchDescription([
         DeclareLaunchArgument('namespace', default_value=EnvironmentVariable(
@@ -30,7 +23,6 @@ def generate_launch_description():
             'camera_image_topic', default_value='sensor_measurements/camera/image_raw'),
         DeclareLaunchArgument(
             'camera_info_topic', default_value='sensor_measurements/camera/camera_info'),
-        DeclareLaunchArgument('tf_config_file', default_value=tf_config),
         Node(
             package='as2_behaviors_perception',
             executable='detect_landing_pad_behavior_node',
@@ -41,12 +33,7 @@ def generate_launch_description():
             parameters=[{'camera_image_topic': LaunchConfiguration('camera_image_topic'),
                          'camera_info_topic': LaunchConfiguration('camera_info_topic'),
                          'use_sim_time': LaunchConfiguration('use_sim_time')},
-                        detector_config],
+                        config],
             emulate_tty=True,
-        ),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(tf_launch),
-            launch_arguments={'tf_config_file': LaunchConfiguration(
-                'tf_config_file')}.items()
         ),
     ])

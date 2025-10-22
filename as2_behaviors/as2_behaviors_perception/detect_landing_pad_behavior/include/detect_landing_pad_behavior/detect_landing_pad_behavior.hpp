@@ -57,7 +57,7 @@ private:
   std::string img_encoding_;
   std::string camera_image_topic_ = "camera/image_raw";
   std::string camera_info_topic_ = "camera/camera_info";
-  std::unordered_map<int, float> aruco_size_;
+  std::unordered_map<int, float> aruco_sizes_;
 
   void loadParameters();
   void setup();
