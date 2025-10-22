@@ -1,0 +1,6 @@
+/**:
+    ros__parameters:
+        camera_model: "pinhole"
+        camera_qos_reliable: true
+        camera_image_topic: "/x500_px4/sensor_measurements/downward_cam/image_raw"
+        camera_info_topic: "/x500_px4/sensor_measurements/downward_cam/camera_info"
