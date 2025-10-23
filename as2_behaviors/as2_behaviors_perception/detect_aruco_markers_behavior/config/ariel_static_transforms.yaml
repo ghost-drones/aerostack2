@@ -1,83 +1,52 @@
 static_transforms:
-  - {child_frame_id: pad_6,   frame_id: aruco_6,   translation: [-0.300,  0.000, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_7,   frame_id: aruco_7,   translation: [ 0.200,  0.480, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_17,  frame_id: aruco_17,  translation: [ 0.200, -0.480, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_107, frame_id: aruco_107, translation: [-0.120,  0.480, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_117, frame_id: aruco_117, translation: [-0.120, -0.480, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_207, frame_id: aruco_207, translation: [-0.440,  0.480, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_217, frame_id: aruco_217, translation: [-0.440, -0.480, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_6,   frame_id: aruco_6,   translation: [ 0.000,  0.300, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_7,   frame_id: aruco_7,   translation: [ 0.480, -0.200, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_17,  frame_id: aruco_17,  translation: [-0.480, -0.200, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_107, frame_id: aruco_107, translation: [ 0.480,  0.120, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_117, frame_id: aruco_117, translation: [-0.480,  0.120, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_207, frame_id: aruco_207, translation: [ 0.480,  0.440, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_217, frame_id: aruco_217, translation: [-0.480,  0.440, 0.0], rotation: [0.0, 0.0, 0.0]}
 
-  - {child_frame_id: pad_8,   frame_id: aruco_8,   translation: [ 0.600,  0.560, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_18,  frame_id: aruco_18,  translation: [ 0.600,  0.400, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_28,  frame_id: aruco_28,  translation: [ 0.600,  0.240, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_38,  frame_id: aruco_38,  translation: [ 0.600,  0.080, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_48,  frame_id: aruco_48,  translation: [ 0.600, -0.080, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_58,  frame_id: aruco_58,  translation: [ 0.600, -0.240, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_68,  frame_id: aruco_68,  translation: [ 0.600, -0.400, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_78,  frame_id: aruco_78,  translation: [ 0.600, -0.560, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_8,   frame_id: aruco_8,   translation: [ 0.560, -0.600, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_18,  frame_id: aruco_18,  translation: [ 0.400, -0.600, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_28,  frame_id: aruco_28,  translation: [ 0.240, -0.600, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_38,  frame_id: aruco_38,  translation: [ 0.080, -0.600, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_48,  frame_id: aruco_48,  translation: [-0.080, -0.600, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_58,  frame_id: aruco_58,  translation: [-0.240, -0.600, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_68,  frame_id: aruco_68,  translation: [-0.400, -0.600, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_78,  frame_id: aruco_78,  translation: [-0.560, -0.600, 0.0], rotation: [0.0, 0.0, 0.0]}
 
-  - {child_frame_id: pad_108, frame_id: aruco_108, translation: [ 0.440,  0.560, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_118, frame_id: aruco_118, translation: [ 0.440,  0.400, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_128, frame_id: aruco_128, translation: [ 0.440,  0.240, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_138, frame_id: aruco_138, translation: [ 0.440,  0.080, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_148, frame_id: aruco_148, translation: [ 0.440, -0.080, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_158, frame_id: aruco_158, translation: [ 0.440, -0.240, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_168, frame_id: aruco_168, translation: [ 0.440, -0.400, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_178, frame_id: aruco_178, translation: [ 0.440, -0.560, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_108, frame_id: aruco_108, translation: [ 0.560, -0.440, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_118, frame_id: aruco_118, translation: [ 0.400, -0.440, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_128, frame_id: aruco_128, translation: [ 0.240, -0.440, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_138, frame_id: aruco_138, translation: [ 0.080, -0.440, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_148, frame_id: aruco_148, translation: [-0.080, -0.440, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_158, frame_id: aruco_158, translation: [-0.240, -0.440, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_168, frame_id: aruco_168, translation: [-0.400, -0.440, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_178, frame_id: aruco_178, translation: [-0.560, -0.440, 0.0], rotation: [0.0, 0.0, 0.0]}
 
-  - {child_frame_id: pad_9,   frame_id: aruco_9,   translation: [ 0.305,  0.280, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_19,  frame_id: aruco_19,  translation: [ 0.305,  0.200, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_29,  frame_id: aruco_29,  translation: [ 0.305,  0.120, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_39,  frame_id: aruco_39,  translation: [ 0.305,  0.040, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_49,  frame_id: aruco_49,  translation: [ 0.305, -0.040, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_59,  frame_id: aruco_59,  translation: [ 0.305, -0.120, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_69,  frame_id: aruco_69,  translation: [ 0.305, -0.200, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_79,  frame_id: aruco_79,  translation: [ 0.305, -0.280, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_9,   frame_id: aruco_9,   translation: [ 0.280, -0.305, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_19,  frame_id: aruco_19,  translation: [ 0.200, -0.305, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_29,  frame_id: aruco_29,  translation: [ 0.120, -0.305, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_39,  frame_id: aruco_39,  translation: [ 0.040, -0.305, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_49,  frame_id: aruco_49,  translation: [-0.040, -0.305, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_59,  frame_id: aruco_59,  translation: [-0.120, -0.305, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_69,  frame_id: aruco_69,  translation: [-0.200, -0.305, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_79,  frame_id: aruco_79,  translation: [-0.280, -0.305, 0.0], rotation: [0.0, 0.0, 0.0]}
 
-  - {child_frame_id: pad_109, frame_id: aruco_109, translation: [ 0.225,  0.240, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_119, frame_id: aruco_119, translation: [ 0.225,  0.160, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_129, frame_id: aruco_129, translation: [ 0.225,  0.080, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_139, frame_id: aruco_139, translation: [ 0.225,  0.000, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_149, frame_id: aruco_149, translation: [ 0.225, -0.080, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_159, frame_id: aruco_159, translation: [ 0.225, -0.160, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_169, frame_id: aruco_169, translation: [ 0.225, -0.240, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_109, frame_id: aruco_109, translation: [ 0.240, -0.225, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_119, frame_id: aruco_119, translation: [ 0.160, -0.225, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_129, frame_id: aruco_129, translation: [ 0.080, -0.225, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_139, frame_id: aruco_139, translation: [ 0.000, -0.225, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_149, frame_id: aruco_149, translation: [-0.080, -0.225, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_159, frame_id: aruco_159, translation: [-0.160, -0.225, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_169, frame_id: aruco_169, translation: [-0.240, -0.225, 0.0], rotation: [0.0, 0.0, 0.0]}
 
-  - {child_frame_id: pad_209, frame_id: aruco_209, translation: [ 0.145,  0.280, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_219, frame_id: aruco_219, translation: [ 0.145,  0.200, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_229, frame_id: aruco_229, translation: [ 0.145,  0.120, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_239, frame_id: aruco_239, translation: [ 0.145,  0.040, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_249, frame_id: aruco_249, translation: [ 0.145, -0.040, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_259, frame_id: aruco_259, translation: [ 0.145, -0.120, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_269, frame_id: aruco_269, translation: [ 0.145, -0.200, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_279, frame_id: aruco_279, translation: [ 0.145, -0.280, 0.0], rotation: [0.0, 0.0, 0.0]}
-
-  - {child_frame_id: pad_309, frame_id: aruco_309, translation: [ 0.065,  0.240, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_319, frame_id: aruco_319, translation: [ 0.065,  0.160, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_329, frame_id: aruco_329, translation: [ 0.065,  0.080, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_339, frame_id: aruco_339, translation: [ 0.065,  0.000, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_349, frame_id: aruco_349, translation: [ 0.065, -0.080, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_359, frame_id: aruco_359, translation: [ 0.065, -0.160, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_369, frame_id: aruco_369, translation: [ 0.065, -0.240, 0.0], rotation: [0.0, 0.0, 0.0]}
-
-  - {child_frame_id: pad_102, frame_id: aruco_102, translation: [ 0.770,  0.640, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_202, frame_id: aruco_202, translation: [ 0.770,  0.480, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_302, frame_id: aruco_302, translation: [ 0.770,  0.320, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_402, frame_id: aruco_402, translation: [ 0.770,  0.160, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_502, frame_id: aruco_502, translation: [ 0.770,  0.000, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_602, frame_id: aruco_602, translation: [ 0.770, -0.160, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_702, frame_id: aruco_702, translation: [ 0.770, -0.320, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_802, frame_id: aruco_802, translation: [ 0.770, -0.480, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_902, frame_id: aruco_902, translation: [ 0.770, -0.640, 0.0], rotation: [0.0, 0.0, 0.0]}
-
-  - {child_frame_id: pad_104, frame_id: aruco_104, translation: [-0.770,  0.640, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_204, frame_id: aruco_204, translation: [-0.770,  0.480, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_304, frame_id: aruco_304, translation: [-0.770,  0.320, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_404, frame_id: aruco_404, translation: [-0.770,  0.160, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_504, frame_id: aruco_504, translation: [-0.770,  0.000, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_604, frame_id: aruco_604, translation: [-0.770, -0.160, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_704, frame_id: aruco_704, translation: [-0.770, -0.320, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_804, frame_id: aruco_804, translation: [-0.770, -0.480, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_904, frame_id: aruco_904, translation: [-0.770, -0.640, 0.0], rotation: [0.0, 0.0, 0.0]}
-
-  - {child_frame_id: pad_103, frame_id: aruco_103, translation: [ 0.640, -0.770, 0.0], rotation: [0.0, 0.0, 0.0]}
-  - {child_frame_id: pad_203, frame_id: aruco_203, translation: [ 0.480, -0.770, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_209, frame_id: aruco_209, translation: [ 0.280, -0.145, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_219, frame_id: aruco_219, translation: [ 0.200, -0.145, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_229, frame_id: aruco_229, translation: [ 0.120, -0.145, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_239, frame_id: aruco_239, translation: [ 0.040, -0.145, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_249, frame_id: aruco_249, translation: [-0.040, -0.145, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_259, frame_id: aruco_259, translation: [-0.120, -0.145, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_269, frame_id: aruco_269, translation: [-0.200, -0.145, 0.0], rotation: [0.0, 0.0, 0.0]}
+  - {child_frame_id: pad_279, frame_id: aruco_279, translation: [-0.280, -0.145, 0.0], rotation: [0.0, 0.0, 0.0]}
