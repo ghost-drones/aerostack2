@@ -26,7 +26,7 @@ public:
 
     speed_motion_handler_ = std::make_shared<as2::motionReferenceHandlers::SpeedMotion>(node_ptr_);
 
-    node_ptr_->declare_parameter<std::string>("marker_frame_id", "aruco_1");
+    node_ptr_->declare_parameter<std::string>("marker_frame_id", "landing_pad");
     node_ptr_->get_parameter("marker_frame_id", marker_frame_id_);
 
     node_ptr_->declare_parameter<double>("vconstant_descent", 0.5);

@@ -10,7 +10,7 @@
 #      notice, this list of conditions and the following disclaimer in the
 #      documentation and/or other materials provided with the distribution.
 #
-#    * Neither the name of the the copyright holder nor the names of its
+#    * Neither the name of the copyright holder nor the names of its
 #      contributors may be used to endorse or promote products derived from
 #      this software without specific prior written permission.
 #
@@ -26,7 +26,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-"""Launch file for aruco detector node."""
+"""Launch file for ArUco detector node and landing pad publisher."""
 
 import os
 
@@ -38,9 +38,15 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    """Launch aruco detector node."""
-    config = os.path.join(get_package_share_directory('as2_behaviors_perception'),
-                          'detect_aruco_markers_behavior/config/sim_params.yaml')
+    """Launch ArUco detector node and landing pad publisher node."""
+    config = os.path.join(
+        get_package_share_directory('as2_behaviors_perception'),
+        'detect_aruco_markers_behavior/config/sim_params.yaml'
+    )
+
+    namespace = LaunchConfiguration('namespace')
+    log_level = LaunchConfiguration('log_level')
+    use_sim_time = LaunchConfiguration('use_sim_time')
 
     return LaunchDescription([
         DeclareLaunchArgument('namespace', default_value=EnvironmentVariable(
@@ -51,16 +57,35 @@ def generate_launch_description():
             'camera_image_topic', default_value='sensor_measurements/camera/image_raw'),
         DeclareLaunchArgument(
             'camera_info_topic', default_value='sensor_measurements/camera/camera_info'),
+
+        # ============================
+        #  ArUco detector node
+        # ============================
         Node(
             package='as2_behaviors_perception',
             executable='detect_aruco_markers_behavior_node',
-            namespace=LaunchConfiguration('namespace'),
+            namespace=namespace,
             output='screen',
-            arguments=['--ros-args', '--log-level',
-                       LaunchConfiguration('log_level')],
-            parameters=[{'camera_image_topic': LaunchConfiguration('camera_image_topic'),
-                         'camera_info_topic': LaunchConfiguration('camera_info_topic')},
-                        config],
             emulate_tty=True,
+            parameters=[
+                {'use_sim_time': use_sim_time,
+                 'camera_image_topic': LaunchConfiguration('camera_image_topic'),
+                 'camera_info_topic': LaunchConfiguration('camera_info_topic')},
+                config
+            ],
+            arguments=['--ros-args', '--log-level', log_level],
+        ),
+
+        # ============================
+        #  Landing pad TF publisher node
+        # ============================
+        Node(
+            package='as2_behaviors_perception',
+            executable='detect_aruco_markers_behavior_pub_landingpad_node',
+            namespace=namespace,
+            output='screen',
+            emulate_tty=True,
+            parameters=[{'use_sim_time': use_sim_time}],
+            arguments=['--ros-args', '--log-level', log_level],
         ),
     ])
