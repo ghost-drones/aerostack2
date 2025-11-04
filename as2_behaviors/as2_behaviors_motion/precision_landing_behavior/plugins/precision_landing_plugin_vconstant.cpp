@@ -101,19 +101,12 @@ public:
     const double dist_xy = std::hypot(dx, dy);
     const double abs_dz  = std::fabs(dz);
 
-    RCLCPP_INFO(node_ptr_->get_logger(),
-                "[vconstant] TF OK -> dx=%.2f dy=%.2f dz=%.2f | dist_xy=%.2f | abs_dz=%.2f",
-                dx, dy, dz, dist_xy, abs_dz);
-
     if (abs_dz < vconstant_z_distance_threshold_) {
       handleSuccess(abs_dz);
       return as2_behavior::ExecutionStatus::SUCCESS;
     }
 
     const auto [vx, vy, vz] = computeVelocityCommand(dx, dy, dz, dist_xy);
-    RCLCPP_INFO(node_ptr_->get_logger(),
-                "[vconstant] Command -> vx=%.2f vy=%.2f vz=%.2f (mode: %s)",
-                vx, vy, vz, dist_xy > vconstant_landing_radius_ ? "XY correction" : "Z descent");
 
     if (!sendSpeedCommand(vx, vy, vz)) {
       result_.precision_landing_success = false;
