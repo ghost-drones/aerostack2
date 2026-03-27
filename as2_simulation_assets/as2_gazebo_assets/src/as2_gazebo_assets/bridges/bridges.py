@@ -89,6 +89,15 @@ def air_pressure(world_name, model_name, sensor_name, link_name, model_prefix=''
         direction=BridgeDirection.GZ_TO_ROS,
     )
 
+def gancho(sensor_name, attach_type):
+    """Gancho bridge."""
+    return Bridge(
+        gz_topic=f'{sensor_name}/{attach_type}',
+        ros_topic=f'{sensor_name}/{attach_type}',
+        gz_type='gz.msgs.Empty',
+        ros_type='std_msgs/msg/Empty',
+        direction=BridgeDirection.ROS_TO_GZ,
+    )
 
 # NOT USED, USE CUSTOM BRIDGE INSTEAD: ODOM --> GROUND_TRUTH
 def odom(model_name):
