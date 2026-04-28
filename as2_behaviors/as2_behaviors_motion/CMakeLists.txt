@@ -35,6 +35,11 @@ endforeach()
 
 # Plugins
 set(PLUGINS_CPP_FILES
+  precision_landing_behavior/plugins/precision_landing_plugin_vconstant.cpp
+  precision_landing_behavior/plugins/precision_landing_plugin_step_ref.cpp
+  precision_landing_behavior/plugins/precision_landing_plugin_cone.cpp
+  precision_landing_behavior/plugins/precision_landing_plugin_pid.cpp
+  precision_landing_behavior/plugins/precision_landing_plugin_align_land.cpp
   follow_path_behavior/plugins/follow_path_plugin_position.cpp
   follow_path_behavior/plugins/follow_path_plugin_trajectory.cpp
   go_to_behavior/plugins/go_to_plugin_position.cpp
@@ -77,6 +82,7 @@ set(SUBPACKAGES
   go_to_behavior
   land_behavior
   takeoff_behavior
+  precision_landing_behavior
   follow_reference_behavior
 )
 
@@ -119,6 +125,12 @@ add_library(takeoff_component SHARED
 ament_target_dependencies(takeoff_component ${PROJECT_DEPENDENCIES})
 rclcpp_components_register_nodes(takeoff_component "TakeoffBehavior")
 
+add_library(precision_landing_component SHARED
+  precision_landing_behavior/src/precision_landing_behavior.cpp
+)
+ament_target_dependencies(precision_landing_component ${PROJECT_DEPENDENCIES})
+rclcpp_components_register_nodes(precision_landing_component "PrecisionLandingBehavior")
+
 add_library(land_component SHARED
   land_behavior/src/land_behavior.cpp
 )
@@ -148,6 +160,7 @@ install(TARGETS
   land_component
   go_to_component
   follow_path_component
+  precision_landing_component
   follow_reference_component
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib

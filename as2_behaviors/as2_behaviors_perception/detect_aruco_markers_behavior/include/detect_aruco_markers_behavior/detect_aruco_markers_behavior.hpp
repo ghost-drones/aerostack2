@@ -37,6 +37,7 @@
 #ifndef DETECT_ARUCO_MARKERS_BEHAVIOR__DETECT_ARUCO_MARKERS_BEHAVIOR_HPP_
 #define DETECT_ARUCO_MARKERS_BEHAVIOR__DETECT_ARUCO_MARKERS_BEHAVIOR_HPP_
 
+#include <cv_bridge/cv_bridge.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <Eigen/Dense>
 #include <memory>
@@ -45,7 +46,6 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include "as2_behavior/behavior_server.hpp"
-#include "as2_core/custom/cv_bridge.hpp"
 #include "as2_core/names/topics.hpp"
 #include "as2_core/node.hpp"
 #include "as2_core/sensor.hpp"
@@ -59,6 +59,7 @@
 #include <image_transport/image_transport.hpp>
 #include <opencv2/aruco.hpp>
 #include <opencv2/calib3d.hpp>
+#include <tf2_ros/transform_broadcaster.h>
 
 class DetectArucoMarkersBehavior
   : public as2_behavior::BehaviorServer<as2_msgs::action::DetectArucoMarkers>
@@ -81,7 +82,7 @@ private:
   std::shared_ptr<as2::sensors::Camera> aruco_img_transport_;
 
   std::vector<uint16_t> target_ids_;
-  float aruco_size_;
+  float aruco_size_default_;
   std::string camera_model_;
   std::string distorsion_model_;
   bool camera_qos_reliable_;
@@ -92,6 +93,7 @@ private:
   std::string img_encoding_;
   std::string camera_image_topic_ = "camera/image_raw";
   std::string camera_info_topic_ = "camera/camera_info";
+  std::unordered_map<int, float> aruco_sizes_;
 
   void loadParameters();
   void setup();
@@ -118,6 +120,8 @@ private:
     const std::shared_ptr<const as2_msgs::action::DetectArucoMarkers::Goal> & goal,
     std::shared_ptr<as2_msgs::action::DetectArucoMarkers::Feedback> & feedback_msg,
     std::shared_ptr<as2_msgs::action::DetectArucoMarkers::Result> & result_msg) override;
+
+  std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
   void on_execution_end(const as2_behavior::ExecutionStatus & state) override;
 };

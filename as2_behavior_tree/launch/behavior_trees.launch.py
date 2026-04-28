@@ -43,7 +43,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'tree', description='Path to XML behavior Tree'),
         DeclareLaunchArgument('groot_logger', description='Want to use groot logger?',
-                              choices={'true', 'false'}, default_value='false'),
+                              choices={'true', 'false'}, default_value='true'),
         DeclareLaunchArgument(
             'groot_client_port', description='Groot publisher port', default_value='1666'),
         DeclareLaunchArgument(

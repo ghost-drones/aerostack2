@@ -10,7 +10,7 @@
 #      notice, this list of conditions and the following disclaimer in the
 #      documentation and/or other materials provided with the distribution.
 #
-#    * Neither the name of the copyright holder nor the names of its
+#    * Neither the name of the the copyright holder nor the names of its
 #      contributors may be used to endorse or promote products derived from
 #      this software without specific prior written permission.
 #
@@ -26,11 +26,13 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-"""Launch file for ArUco detector node and landing pad publisher."""
+"""Launch file for point gimbal behavior node."""
 
 import os
 
 from ament_index_python.packages import get_package_share_directory
+from as2_core.declare_launch_arguments_from_config_file import DeclareLaunchArgumentsFromConfigFile
+from as2_core.launch_configuration_from_config_file import LaunchConfigurationFromConfigFile
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration
@@ -38,54 +40,34 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    """Launch ArUco detector node and landing pad publisher node."""
-    config = os.path.join(
-        get_package_share_directory('as2_behaviors_perception'),
-        'detect_aruco_markers_behavior/config/sim_params.yaml'
-    )
-
-    namespace = LaunchConfiguration('namespace')
-    log_level = LaunchConfiguration('log_level')
-    use_sim_time = LaunchConfiguration('use_sim_time')
+    """Launch point gimbal behavior node."""
+    config_file = os.path.join(get_package_share_directory('as2_behaviors_perception'),
+                               'point_gimbal_behavior/config/config_default.yaml')
 
     return LaunchDescription([
-        DeclareLaunchArgument('namespace', default_value=EnvironmentVariable(
-            'AEROSTACK2_SIMULATION_DRONE_ID')),
+        DeclareLaunchArgument('namespace', description='Drone namespace',
+                              default_value=EnvironmentVariable('AEROSTACK2_SIMULATION_DRONE_ID')),
         DeclareLaunchArgument('use_sim_time', default_value='false'),
-        DeclareLaunchArgument('log_level', default_value='info'),
-        DeclareLaunchArgument(
-            'camera_image_topic', default_value='sensor_measurements/camera/image_raw'),
-        DeclareLaunchArgument(
-            'camera_info_topic', default_value='sensor_measurements/camera/camera_info'),
-
-        # ============================
-        #  ArUco detector node
-        # ============================
+        DeclareLaunchArgument('log_level', default_value='info',
+                              description='Log Severity Level'),
+        DeclareLaunchArgumentsFromConfigFile(
+            name='config_file', source_file=config_file,
+            description='Configuration file'),
         Node(
             package='as2_behaviors_perception',
-            executable='detect_aruco_markers_behavior_node',
-            namespace=namespace,
+            executable='point_gimbal_behavior_node',
+            namespace=LaunchConfiguration('namespace'),
             output='screen',
             emulate_tty=True,
+            arguments=['--ros-args', '--log-level',
+                       LaunchConfiguration('log_level')],
             parameters=[
-                {'use_sim_time': use_sim_time,
-                 'camera_image_topic': LaunchConfiguration('camera_image_topic'),
-                 'camera_info_topic': LaunchConfiguration('camera_info_topic')},
-                config
+                {
+                    'use_sim_time': LaunchConfiguration('use_sim_time'),
+                },
+                LaunchConfigurationFromConfigFile(
+                    'config_file',
+                    default_file=config_file),
             ],
-            arguments=['--ros-args', '--log-level', log_level],
-        ),
-
-        # ============================
-        #  Landing pad TF publisher node
-        # ============================
-        Node(
-            package='as2_behaviors_perception',
-            executable='detect_aruco_markers_behavior_pub_landingpad_node',
-            namespace=namespace,
-            output='screen',
-            emulate_tty=True,
-            parameters=[{'use_sim_time': use_sim_time}],
-            arguments=['--ros-args', '--log-level', log_level],
         ),
     ])

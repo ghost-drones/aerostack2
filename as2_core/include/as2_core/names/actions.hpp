@@ -53,6 +53,7 @@ const char followreference[] = "FollowReferenceBehavior";
 const char followpath[] = "FollowPathBehavior";
 const char land[] = "LandBehavior";
 const char trajectorygenerator[] = "TrajectoryGeneratorBehavior";
+const char precisionlanding[] = "PrecisionLandingBehavior";
 }  // namespace behaviors
 }  // namespace actions
 }  // namespace as2_names
