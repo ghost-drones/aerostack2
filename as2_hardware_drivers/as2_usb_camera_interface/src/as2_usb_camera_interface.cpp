@@ -86,23 +86,19 @@ void UsbCameraInterface::setupCamera()
   RCLCPP_INFO(this->get_logger(), "Video device: %s", device_port.c_str());
 
   if (arducam) {
-    RCLCPP_INFO(this->get_logger(), "Using arducam");
-    std::string image_width_str = std::to_string(image_width);
-    std::string image_height_str = std::to_string(image_height);
-    int framerate_int = static_cast<int>(std::round(framerate));
-    std::string framerate_str = std::to_string(framerate_int);
+    RCLCPP_INFO(this->get_logger(), "Using RPi5 CSI camera via V4L2");
 
-    auto device_full_name = "nvarguscamerasrc sensor-id=" + device_port +
-      " ! video/x-raw(memory:NVMM), width=(int)" + image_width_str + ", height=(int)" +
-      image_height_str + ",format=(string)NV12, framerate=(fraction)" + framerate_str +
-      "/1 ! nvvidconv ! video/x-raw, format=(string)BGRx " +
-      "! videoconvert ! video/x-raw,format=(string)BGR ! appsink drop=1";
-    RCLCPP_INFO(this->get_logger(), "Device full name: %s", device_full_name.c_str());
-    cap_ = cv::VideoCapture(device_full_name, cv::CAP_GSTREAMER);
+    cap_.open(device_port, cv::CAP_V4L2);
     if (!cap_.isOpened()) {
       RCLCPP_ERROR(get_logger(), "Cannot open device");
       return;
     }
+    
+    cap_.set(cv::CAP_PROP_FOURCC, cv::VideoWriter::fourcc('B', 'G', 'R', '3'));
+    cap_.set(cv::CAP_PROP_FRAME_WIDTH, image_width);
+    cap_.set(cv::CAP_PROP_FRAME_HEIGHT, image_height);
+    cap_.set(cv::CAP_PROP_FPS, framerate);
+
   } else {
     cap_.open(device_port);
     if (!cap_.isOpened()) {
