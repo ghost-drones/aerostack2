@@ -32,19 +32,16 @@
   <class type="takeoff_plugin_trajectory::Plugin" base_class_type="takeoff_base::TakeoffBase">
     <description>Takeoff done with trajectory generator.</description>
   </class>
-  <class type="precision_landing_plugin_vconstant::Plugin" base_class_type="precision_landing_base::PrecisionLandingBase">
-    <description>Precision Landing done with vconstant strategy.</description>
-  </class>
-  <class type="precision_landing_plugin_step_ref::Plugin" base_class_type="precision_landing_base::PrecisionLandingBase">
-    <description>Precision Landing done with staircase step-reference descent strategy.</description>
-  </class>
   <class type="precision_landing_plugin_cone::Plugin" base_class_type="precision_landing_base::PrecisionLandingBase">
-    <description>Precision Landing done with cone-based adaptive descent velocity strategy.</description>
+    <description>Precision Landing with cone-based adaptive descent velocity strategy.</description>
+  </class>
+  <class type="precision_landing_plugin_p::Plugin" base_class_type="precision_landing_base::PrecisionLandingBase">
+    <description>Precision Landing with proportional (P) XY control, proportional yaw matching, and constant descent inside landing radius. Supports yaw_detached mode.</description>
+  </class>
+  <class type="precision_landing_plugin_pi::Plugin" base_class_type="precision_landing_base::PrecisionLandingBase">
+    <description>Precision Landing with proportional+integral (PI) XY control, proportional yaw matching, and constant descent inside landing radius. Supports yaw_detached mode.</description>
   </class>
   <class type="precision_landing_plugin_pid::Plugin" base_class_type="precision_landing_base::PrecisionLandingBase">
-    <description>Precision Landing with PID (P+I+D) XY control, proportional yaw matching, and constant descent inside landing radius.</description>
-  </class>
-  <class type="precision_landing_plugin_align_land::Plugin" base_class_type="precision_landing_base::PrecisionLandingBase">
-    <description>Precision Landing with two-phase state machine: ALIGNING (XY+yaw correction, no descent) then DESCENDING (constant descent with alignment maintenance and hysteresis).</description>
+    <description>Precision Landing with full PID XY control, proportional yaw matching, and constant descent inside landing radius. Supports yaw_detached mode.</description>
   </class>
 </library>

@@ -35,11 +35,10 @@ endforeach()
 
 # Plugins
 set(PLUGINS_CPP_FILES
-  precision_landing_behavior/plugins/precision_landing_plugin_vconstant.cpp
-  precision_landing_behavior/plugins/precision_landing_plugin_step_ref.cpp
   precision_landing_behavior/plugins/precision_landing_plugin_cone.cpp
+  precision_landing_behavior/plugins/precision_landing_plugin_p.cpp
+  precision_landing_behavior/plugins/precision_landing_plugin_pi.cpp
   precision_landing_behavior/plugins/precision_landing_plugin_pid.cpp
-  precision_landing_behavior/plugins/precision_landing_plugin_align_land.cpp
   follow_path_behavior/plugins/follow_path_plugin_position.cpp
   follow_path_behavior/plugins/follow_path_plugin_trajectory.cpp
   go_to_behavior/plugins/go_to_plugin_position.cpp

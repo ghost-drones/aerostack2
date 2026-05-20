@@ -43,13 +43,14 @@ public:
     node_ptr_->declare_parameter<std::string>("marker_frame_id", "landing_pad");
     node_ptr_->get_parameter("marker_frame_id", marker_frame_id_);
 
-    node_ptr_->declare_parameter<double>("cone_z_distance_threshold", 0.1);
-    node_ptr_->get_parameter("cone_z_distance_threshold", cone_z_distance_threshold_);
+    // Shared parameters
+    node_ptr_->declare_parameter<double>("z_distance_threshold", 0.1);
+    node_ptr_->get_parameter("z_distance_threshold", cone_z_distance_threshold_);
 
     // Maximum downward speed (m/s, used as saturation and as the free-descent
     // value above cone_max_height).
-    node_ptr_->declare_parameter<double>("cone_down_sat", 0.3);
-    node_ptr_->get_parameter("cone_down_sat", cone_down_sat_);
+    node_ptr_->declare_parameter<double>("z_descent", 0.3);
+    node_ptr_->get_parameter("z_descent", cone_down_sat_);
 
     // Inverse gain: lower value → more aggressive descent when centred.
     node_ptr_->declare_parameter<double>("cone_inv_gain", 1.0);
@@ -83,8 +84,8 @@ public:
 
     node_ptr_->declare_parameter<double>("cone_xy_gain", 1.0);
     node_ptr_->get_parameter("cone_xy_gain", cone_xy_gain_);
-    node_ptr_->declare_parameter<double>("cone_xy_speed_max", 1.0);
-    node_ptr_->get_parameter("cone_xy_speed_max", cone_xy_speed_max_);
+    node_ptr_->declare_parameter<double>("xy_speed_max", 1.0);
+    node_ptr_->get_parameter("xy_speed_max", cone_xy_speed_max_);
 
     RCLCPP_INFO(
         node_ptr_->get_logger(),

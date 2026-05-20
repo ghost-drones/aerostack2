@@ -1,71 +1,69 @@
 /**:
   ros__parameters:
-    aruco_timeout_threshold: 10.0       # seconds
-    tf_timeout_threshold: 0.1           # Default tf timeout (100ms)
-    marker_frame_id: "landing_pad"
 
-    # --- vconstant plugin ---
-    vconstant_descent: 0.5              # m/s constant descent speed
-    vconstant_landing_radius: 0.1       # m  XY radius to start descending
-    vconstant_z_distance_threshold: 0.3 # m  success height above pad
-    vconstant_xy_gain:  1.0             # m/s per m of XY error
-    vconstant_xy_speed_max: 1.0         # m/s XY saturation
+    # ================================================================
+    # Global
+    # ================================================================
+    aruco_timeout_threshold: 10.0        # s     timeout before FAILURE if ArUco is lost
+    tf_timeout_threshold:    0.1         # s     TF lookup timeout
+    marker_frame_id: "landing_pad"       #       TF frame of the landing target
 
-    # --- step_ref plugin ---
-    # Descends in discrete steps: inside the XY cone a proportional controller
-    # tracks a reference that is decremented by step_ref_descent_step each time
-    # it is reached.  Outside the cone XY is corrected and altitude is held.
-    step_ref_descent_step: 0.3          # m   size of each altitude step
-    step_ref_z_gain: 1.0                # 1/s proportional gain for Z
-    step_ref_speed_up: 0.2              # m/s ascent speed when outside cone and too low
-    step_ref_z_distance_threshold: 0.1  # m   success height above pad
-    step_ref_safe_ref_altitude: 3.5     # m   altitude target when outside cone and high
-    step_ref_safe_ascent_altitude: 3.0  # m   below this, ascend for safety when outside cone
-    step_ref_xy_gain: 1.0               # m/s per m of XY error
-    step_ref_xy_speed_max: 1.0          # m/s XY saturation
+    # ================================================================
+    # Shared across all controllers
+    # ================================================================
+    z_descent:            0.2            # m/s   constant descent speed
+    z_distance_threshold: 0.1            # m     success height above pad
+    xy_speed_max:         1.0            # m/s   XY saturation
 
-    # --- cone plugin ---
-    # Descent speed is computed from a cone visibility constraint and an
-    # aversion term.  XY is corrected in parallel.
-    cone_z_distance_threshold: 0.1      # m   success height above pad
-    cone_down_sat: 0.3                  # m/s maximum downward speed
-    cone_inv_gain: 1.0                  # lower → more aggressive descent when centred
-    cone_gain: 3.0                      # higher → wider cone (descent allowed from further out)
-    cone_offset: 0.1                    # offset subtracted from cone term
-    cone_max_height: 2.0                # m   above this altitude cone constraint is relaxed
-    cone_aversion_gain: 0.5             # weight of dist/altitude^2 aversion penalty
-    cone_brake_gain: 1.0                # braking proportional gain near the ground
-    cone_gear_offset: 0.45              # m   landing gear height offset
-    cone_brake_alti: 0.3                # m   braking activation altitude
-    cone_min_height: 0.1                # m   below this, hold altitude
-    cone_xy_gain: 1.0                   # m/s per m of XY error
-    cone_xy_speed_max: 1.0              # m/s XY saturation
+    # Shared: p / pi / pid only (cone uses different descent geometry)
+    landing_radius: 0.3                  # m     XY radius to enable descent
+    yaw_speed_max:  0.5                  # rad/s yaw rate saturation
 
-    # --- pid plugin ---
-    # Full PID for XY position error; proportional yaw matching via pad TF orientation.
-    # Descent is a constant speed, enabled only when inside pid_landing_radius.
-    pid_xy_kp: 1.0                      # P gain for XY
-    pid_xy_ki: 0.05                     # I gain for XY (removes steady-state error)
-    pid_xy_kd: 0.15                     # D gain for XY (damps oscillations)
-    pid_xy_speed_max: 1.0               # m/s XY saturation
-    pid_xy_integral_max: 0.3            # m/s integral windup clamp
-    pid_z_descent: 0.3                  # m/s constant descent speed
-    pid_z_distance_threshold: 0.1       # m   success height above pad
-    pid_landing_radius: 0.3             # m   XY radius within which descent is enabled
-    pid_yaw_kp: 1.0                     # rad/s per rad yaw error
-    pid_yaw_speed_max: 0.5              # rad/s yaw rate saturation
+    # ================================================================
+    # Shared: yaw-detached alignment  (p / pi / pid plugins only)
+    # ================================================================
+    # When yaw_detached is true the controller runs two sequential
+    # alignment phases before descent begins:
+    #   1. ALIGNING_XY  — correct XY only (no yaw, no descent)
+    #   2. ALIGNING_YAW — correct yaw only (hold position, no descent)
+    # Once both thresholds are satisfied, normal descent starts.
+    yaw_detached:               false
+    yaw_detached_xy_threshold:  0.3      # m     switch to ALIGNING_YAW when dist_xy < this
+    yaw_detached_yaw_threshold: 0.1      # rad   start descent when |yaw_err| < this
 
-    # --- align_land plugin ---
-    # Two-phase state machine: ALIGNING (XY+yaw correction, no descent) then
-    # DESCENDING (descent + alignment maintenance).  Hysteresis prevents chattering:
-    # enter DESCENDING at the tight "align" thresholds, exit at the looser "realign".
-    al_align_xy_threshold: 0.15         # m    enter DESCENDING when dist_xy < this
-    al_align_yaw_threshold: 0.10        # rad  enter DESCENDING when |yaw_err| < this
-    al_realign_xy_threshold: 0.30       # m    return to ALIGNING when dist_xy > this
-    al_realign_yaw_threshold: 0.20      # rad  return to ALIGNING when |yaw_err| > this
-    al_descent_speed: 0.3               # m/s  constant descent speed in DESCENDING phase
-    al_z_distance_threshold: 0.1        # m    success height above pad
-    al_xy_gain: 1.0                     # m/s per m of XY error (P gain)
-    al_xy_speed_max: 1.0                # m/s XY saturation
-    al_yaw_kp: 1.2                      # rad/s per rad yaw error
-    al_yaw_speed_max: 0.6               # rad/s yaw rate saturation
+    # ================================================================
+    # p plugin  — proportional only
+    # ================================================================
+    p_xy_kp:  1.288                      # P gain for XY
+    p_yaw_kp: 1.034                      # rad/s per rad yaw error
+
+    # ================================================================
+    # pi plugin  — proportional + integral
+    # ================================================================
+    pi_xy_kp:           1.2878           # P gain for XY
+    pi_xy_ki:           0.0225           # I gain  (removes steady-state error)
+    pi_xy_integral_max: 0.3              # m/s   anti-windup clamp
+    pi_yaw_kp:          1.034            # rad/s per rad yaw error
+
+    # ================================================================
+    # pid plugin  — proportional + integral + derivative
+    # ================================================================
+    pid_xy_kp:           0.9979          # P gain for XY
+    pid_xy_ki:           0.1546          # I gain  (removes steady-state error)
+    pid_xy_kd:           0.9689          # D gain  (damps oscillations)
+    pid_xy_integral_max: 0.3             # m/s   anti-windup clamp
+    pid_yaw_kp:          1.034           # rad/s per rad yaw error
+
+    # ================================================================
+    # cone plugin  — adaptive cone-based descent
+    # ================================================================
+    cone_inv_gain:     1.0               # lower → more aggressive descent when centred
+    cone_gain:         3.0               # higher → wider cone (descent allowed from further out)
+    cone_offset:       0.1               # offset subtracted from cone term
+    cone_max_height:   2.0               # m     above this altitude cone constraint is relaxed
+    cone_aversion_gain: 0.5              # weight of dist/altitude^2 aversion penalty
+    cone_brake_gain:   1.0               # braking proportional gain near the ground
+    cone_gear_offset:  0.45              # m     landing gear height offset
+    cone_brake_alti:   0.3               # m     braking activation altitude
+    cone_min_height:   0.1               # m     below this, hold altitude
+    cone_xy_gain:      1.0               # m/s per m of XY error
